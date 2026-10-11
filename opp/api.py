@@ -205,11 +205,11 @@ def demo_malformed():
 
 
 @app.post("/api/demo/kill-worker")
-def demo_kill():
+def demo_kill(plate: str | None = None):
     """SIGKILL the worker that holds a live lease (mid-run). The supervisor starts a replacement."""
     with connect() as conn, conn.cursor() as cur:
         cur.execute("SELECT id, lease_owner FROM runs WHERE state='RUNNING' AND lease_until > now() "
-                    "ORDER BY id LIMIT 1")
+                    "AND (%s::text IS NULL OR plate_id=%s) ORDER BY id LIMIT 1", (plate, plate))
         r = cur.fetchone()
     if not r:
         raise HTTPException(409, "no run in progress")

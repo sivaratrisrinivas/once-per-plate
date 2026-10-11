@@ -1,0 +1,9 @@
+# Free demo: one Docker web service. Postgres and RabbitMQ run inside the container
+# (see start.sh), so no paid add-ons. Data resets when the instance restarts or sleeps.
+services:
+  - type: web
+    name: once-per-plate
+    runtime: docker
+    plan: free
+    region: oregon
+    healthCheckPath: /health

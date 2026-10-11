@@ -117,6 +117,9 @@ def main():
         except psycopg.OperationalError:
             log("database unavailable, retrying")
             time.sleep(1)
+        except Exception as e:  # never let one bad file or a broker blip stop the watcher
+            log("error, retrying:", type(e).__name__, str(e)[:120])
+            time.sleep(1)
         time.sleep(0.2)
 
 

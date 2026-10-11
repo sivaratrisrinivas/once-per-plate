@@ -1,0 +1,6 @@
+.venv
+.git
+video-work
+drop
+__pycache__
+.pytest_cache
