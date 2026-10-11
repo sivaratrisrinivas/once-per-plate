@@ -1,9 +1,11 @@
-# Separate services, the shape you would run for real. Not used by the free demo.
+# Postgres and RabbitMQ for local runs (the app runs on the host; see the README).
 services:
   postgres:
     image: postgres:17
     environment: {POSTGRES_USER: opp, POSTGRES_HOST_AUTH_METHOD: trust, POSTGRES_DB: opp}
     ports: ["5434:5432"]
+    healthcheck: {test: ["CMD", "pg_isready", "-U", "opp"], interval: 2s, retries: 30}
   rabbitmq:
     image: rabbitmq:4-management
     ports: ["5672:5672", "15672:15672"]
+    healthcheck: {test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"], interval: 3s, retries: 40}

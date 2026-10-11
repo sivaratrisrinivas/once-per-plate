@@ -1,0 +1,19 @@
+$ python scripts/chaos.py
+PASS  same_file_twice          3 arrivals (2 names) -> 1 run, QC ran once  [4.4s]
+PASS  half_written             no run while writing; stalled half file held by checksum sidecar  [9.5s]
+PASS  reexport_changed_well    v2 flagged 'supersedes v1', waited for its own approval  [5.2s]
+PASS  kill_worker_mid_run      killed worker-426298; redelivered, resumed on attempt 2, one proposal  [8.4s]
+PASS  crash_before_ack         result committed, ack lost, redelivery ignored  [2.5s]
+PASS  duplicate_messages       6 messages for one run -> 1 QC run, 5 no-ops  [2.8s]
+PASS  broker_restart           9 plates (3 arrived while down) -> 9 runs, 9 proposals  [15.0s]
+PASS  postgres_restart         restart mid-batch; 11 plates -> 11 proposals  [6.0s]
+PASS  burst_50                 60 files -> 50 runs, every plate once (6s, 4 workers)  [5.8s]
+PASS  approve_twice            10 concurrent approvals -> 1 applied, 96 rows  [3.0s]
+PASS  reject_then_redrop       re-drop linked to the rejected run; 0 rows; approve now 409  [4.2s]
+PASS  writeback_timeout        retried write is a no-op; sweeper finished an orphaned approval  [11.5s]
+PASS  two_workers_race         1 of 20 claims won (racer-10); the losers cannot write  [0.3s]
+PASS  out_of_order             v1 result discarded, older late export kept for audit only; 1 approvable version  [7.9s]
+PASS  malformed_parked         2 bad files -> parked queue, 1 attempt each; good file still ran  [3.3s]
+PASS  ledger_replay            12 runs rebuilt from 61 events, all match  [3.5s]
+
+16/16 passed in 93s (RabbitMQ + Postgres, real worker processes)

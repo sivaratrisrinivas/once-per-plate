@@ -1,7 +1,7 @@
 {
   "passed": 16,
   "total": 16,
-  "ran_at": "2026-10-12 02:56 IST",
+  "ran_at": "2026-10-12 03:07 IST",
   "environment": "PostgreSQL 17.11 (Debian 17.11-0+deb13u1), RabbitMQ 4.0.5, Python 3.13.5",
   "cases": [
     {
@@ -22,14 +22,14 @@
       "case": "reexport_changed_well",
       "pass": true,
       "detail": "v2 flagged 'supersedes v1', waited for its own approval",
-      "seconds": 5.6,
+      "seconds": 5.2,
       "doc": "Approved plate re-exported with one well changed: new version, needs its own approval."
     },
     {
       "case": "kill_worker_mid_run",
       "pass": true,
-      "detail": "killed worker-418183; redelivered, resumed on attempt 2, one proposal",
-      "seconds": 8.1,
+      "detail": "killed worker-426298; redelivered, resumed on attempt 2, one proposal",
+      "seconds": 8.4,
       "doc": "kill -9 the worker holding the run. RabbitMQ redelivers; the next worker takes over after the lease."
     },
     {
@@ -50,48 +50,48 @@
       "case": "broker_restart",
       "pass": true,
       "detail": "9 plates (3 arrived while down) -> 9 runs, 9 proposals",
-      "seconds": 15.2,
+      "seconds": 15.0,
       "doc": "RabbitMQ stops with unacked messages in flight, and files keep arriving while it is down."
     },
     {
       "case": "postgres_restart",
       "pass": true,
       "detail": "restart mid-batch; 11 plates -> 11 proposals",
-      "seconds": 6.7,
+      "seconds": 6.0,
       "doc": "Postgres restarts in the middle of a batch."
     },
     {
       "case": "burst_50",
       "pass": true,
       "detail": "60 files -> 50 runs, every plate once (6s, 4 workers)",
-      "seconds": 6.4,
+      "seconds": 5.8,
       "doc": "50 plates plus 10 duplicate re-syncs land at once."
     },
     {
       "case": "approve_twice",
       "pass": true,
       "detail": "10 concurrent approvals -> 1 applied, 96 rows",
-      "seconds": 2.6,
+      "seconds": 3.0,
       "doc": "Approve clicked 10 times at once (double clicks, two tabs, a retrying client)."
     },
     {
       "case": "reject_then_redrop",
       "pass": true,
       "detail": "re-drop linked to the rejected run; 0 rows; approve now 409",
-      "seconds": 4.4,
+      "seconds": 4.2,
       "doc": "Rejected run; the same file is dropped again. It is linked, not run again."
     },
     {
       "case": "writeback_timeout",
       "pass": true,
       "detail": "retried write is a no-op; sweeper finished an orphaned approval",
-      "seconds": 10.7,
+      "seconds": 11.5,
       "doc": "Rows commit but the writer never hears back, so it retries. Then the sweeper retries too."
     },
     {
       "case": "two_workers_race",
       "pass": true,
-      "detail": "1 of 20 claims won (racer-15); the losers cannot write",
+      "detail": "1 of 20 claims won (racer-10); the losers cannot write",
       "seconds": 0.3,
       "doc": "20 workers try to claim the same run at the same instant."
     },
@@ -99,7 +99,7 @@
       "case": "out_of_order",
       "pass": true,
       "detail": "v1 result discarded, older late export kept for audit only; 1 approvable version",
-      "seconds": 7.4,
+      "seconds": 7.9,
       "doc": "v2 arrives while v1 is still running; then an older export shows up late."
     },
     {
@@ -112,8 +112,8 @@
     {
       "case": "ledger_replay",
       "pass": true,
-      "detail": "12 runs rebuilt from 62 events, all match",
-      "seconds": 3.4,
+      "detail": "12 runs rebuilt from 61 events, all match",
+      "seconds": 3.5,
       "doc": "Mixed workload, then rebuild every run's state from the append-only event log."
     }
   ]
